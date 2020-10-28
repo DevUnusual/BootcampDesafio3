@@ -1,16 +1,16 @@
-import React,{useState, useeffect} from 'react';
+import React,{useState, useEffect} from 'react';
 import api from "./services/api";
 
 import "./styles.css";
 
 function App() {
-  const [repositories, setProjects] = useState([])
+  const [repositories, setRepositories] = useState([])
 
-  useeffect(() => {
+  useEffect(() => {
     api.get('/repositories').then((response) => {
-      setProjects(response.data)
+      setRepositories(response.data)
     })
-  },[])
+  },[repositories])
 
   async function handleAddRepository() {
     const newRepository = {
@@ -21,7 +21,7 @@ function App() {
 
     api.post('repositories', newRepository)
 
-    setProjects([...repositories, newRepository])
+    setRepositories([...repositories, newRepository])
   }
 
   async function handleRemoveRepository(id) {

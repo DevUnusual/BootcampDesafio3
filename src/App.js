@@ -10,34 +10,34 @@ function App() {
     api.get('/repositories').then((response) => {
       setRepositories(response.data)
     })
-  },[repositories])
+  },[])
 
   async function handleAddRepository() {
-    const newRepository = {
-      url: "https://github.com/Rocketseat/unform",
+    const response = await api.post('repositories',{
       title: `Repositorio${(repositories.length + 1)}`,
+      url: "https://github.com/Rocketseat/unform",
       techs: ["React", "ReactNative", "TypeScript", "ContextApi"]
-    }
+    })
 
-    api.post('repositories', newRepository)
-
-    setRepositories([...repositories, newRepository])
+    setRepositories([...repositories, response.data])
   }
 
   async function handleRemoveRepository(id) {
     api.delete(`repositories/${id}`)
+
+    setRepositories(repositories.filter(repo => repo.id !== id))
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
-        
-          {repositories.map(repository => <li key={repository.id}>{repository.title}
+          {repositories.map(repository =>( 
+          <li key={repository.id}>
+            {repository.title}
             <button onClick={() => handleRemoveRepository(repository.id)}>
             Remover
             </button>
-          </li>)}
-        
+          </li>))}
       </ul>
 
       <button onClick={handleAddRepository}>Adicionar</button>
